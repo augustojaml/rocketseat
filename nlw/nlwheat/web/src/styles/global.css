@@ -1,0 +1,28 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: Roboto, sans-serif;
+}
+
+:root {
+  --background1: #121214;
+  --background2: #17171a;
+  --background3: #1b1b1f;
+  --background4: #202024;
+  --background5: #29292e;
+
+  --shape: #e1e1e6;
+  --gray: #c4c4cc;
+
+  --yellow: #ffcd1e;
+  --purple: #ff008e;
+
+  --text-color1: #09090a;
+  --text-collor2: #8d8d99;
+}
+
+body {
+  color: var(--shape);
+  background: var(--background1);
+}

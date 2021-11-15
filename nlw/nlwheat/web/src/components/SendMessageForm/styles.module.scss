@@ -1,0 +1,119 @@
+.sendMessageFormWrapper {
+  background: var(--background3);
+  padding: 24px;
+  align-self: center;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  position: relative;
+}
+
+.signOutButton {
+  background: transparent;
+  border: 0;
+  color: var(--gray);
+  position: absolute;
+  left: 24px;
+  top: 24px;
+  transition: filter 0.3s;
+  cursor: pointer;
+  &:hover {
+    filter: brightness(0.9);
+  }
+}
+
+.userInformation {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .userImage {
+    padding: 3px;
+    background: linear-gradient(
+      100deg,
+      var(--purple) 0.48%,
+      var(--yellow) 100%
+    );
+    border-radius: 50%;
+    line-height: 0;
+
+    img {
+      width: 94px;
+      height: 94px;
+      border-radius: 50%;
+      border: 6px solid var(--background1);
+    }
+  }
+
+  .userName {
+    font-size: 24px;
+    line-height: 30px;
+    margin-top: 16px;
+  }
+
+  .userGithub {
+    display: flex;
+    align-items: center;
+    margin-top: 8px;
+    color: var(--gray);
+    svg {
+      margin-right: 8px;
+    }
+  }
+}
+
+.sendMessageForm {
+  display: flex;
+  flex-direction: column;
+  align-self: stretch;
+  margin-top: 48px;
+  background: var(--background4);
+  label {
+    padding: 18px 24px;
+    font-size: 20px;
+    background: var(--background5);
+    font-weight: bold;
+    text-align: left;
+  }
+  textarea {
+    background: transparent;
+    border: 0;
+    padding: 24px;
+    resize: none;
+    height: 160px;
+    color: var(--shape);
+    font-size: 16px;
+    line-height: 24px;
+    &:focus {
+      outline: 0;
+    }
+    &::placeholder {
+      color: var(--text-collor2);
+    }
+  }
+
+  button {
+    align-self: flex-end;
+    background: var(--purple);
+    margin: 24px;
+    padding: 0 32px;
+    cursor: pointer;
+    height: 40px;
+    border: 0;
+    color: var(--shape);
+    font-size: 14px;
+    font-weight: bold;
+    text-transform: uppercase;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: filter 0.3s;
+
+    &:hover {
+      filter: brightness(0.9);
+    }
+  }
+}

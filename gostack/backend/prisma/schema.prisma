@@ -1,0 +1,59 @@
+// datasource db {
+//   provider = "postgresql"
+//   url      = env("DATABASE_URL")
+// }
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./gobarber.db"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id            String   @id @default(uuid())
+  name          String
+  email         String   @unique
+  password      String
+  avatar        String?
+  isHairdresser Boolean  @default(false)
+  created_at    DateTime @default(now())
+  updated_at    DateTime @default(now()) @updatedAt
+
+  users_tokens UsersTokens[]
+
+  providers Appointment[] @relation("providerAppointments")
+  users     Appointment[] @relation("userAppointments")
+  @@map("users")
+}
+
+model UsersTokens {
+  id            String   @id @default(uuid())
+  type          String
+  refresh_token String
+  user_id       String
+  expire_date   DateTime
+  created_at    DateTime @default(now())
+  updated_at    DateTime @default(now()) @updatedAt
+
+  users_tokens User @relation(fields: [user_id], references: [id])
+
+  @@map("users_tokens")
+}
+
+model Appointment {
+  id          String   @id @default(uuid())
+  provider_id String   @default(uuid())
+  user_id     String   @default(uuid())
+  date        DateTime
+  created_at  DateTime @default(now())
+  updated_at  DateTime @default(now()) @updatedAt
+
+
+  provider User @relation("providerAppointments", fields: [provider_id], references: [id])
+  user     User @relation("userAppointments", fields: [user_id], references: [id])
+
+  @@map("appointments")
+}
