@@ -220,3 +220,7 @@ npm install -g expo-cli
     };
   })();
   ```
+
+### Expo Authentication
+
+- [Documentation](https://docs.expo.dev/guides/authentication/)
