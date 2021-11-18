@@ -224,3 +224,8 @@ npm install -g expo-cli
 ### Expo Authentication
 
 - [Documentation](https://docs.expo.dev/guides/authentication/)
+- [Documentation](https://developers.google.com/identity/protocols/oauth2/openid-connect)
+
+### Babel Plugin Inline Dotenv
+
+- [Documentation](https://www.npmjs.com/package/babel-plugin-inline-dotenv)
