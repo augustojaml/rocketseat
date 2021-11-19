@@ -164,6 +164,7 @@ npm install -g expo-cli
 ### React Navigation
 
 [Documentation](https://reactnavigation.org/)
+[Documentation](https://reactnavigation.org/docs/stack-navigator/)
 
 ### Async Storage
 
@@ -229,3 +230,7 @@ npm install -g expo-cli
 ### Babel Plugin Inline Dotenv
 
 - [Documentation](https://www.npmjs.com/package/babel-plugin-inline-dotenv)
+
+### Apple Authentication
+
+- [Documentation](https://docs.expo.dev/versions/latest/sdk/apple-authentication/)

@@ -18,14 +18,25 @@ import { SignInSocialButton } from '../../components/SignInSocialButton';
 import { useAuth } from '../../hooks/useAuth';
 
 export function SignIn() {
-  const { signInWithGoogle } = useAuth();
+  const { signInWithGoogle, signInWithApple } = useAuth();
 
   async function handleSignInWithGoogle() {
     try {
       await signInWithGoogle();
     } catch (err) {
+      // eslint-disable-next-line no-console
       console.log(err);
       Alert.alert('Não foi possivel se conectar com a conta Google');
+    }
+  }
+
+  async function handleSignInWithApple() {
+    try {
+      await signInWithApple();
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.log(err);
+      Alert.alert('Não foi possivel se conectar com a conta Apple');
     }
   }
 
@@ -53,7 +64,7 @@ export function SignIn() {
             <SignInSocialButton
               title="Entrar com Apple"
               svg={AppleSVG}
-              onPress={() => null}
+              onPress={handleSignInWithApple}
             />
           </FooterWrapper>
         </Footer>
