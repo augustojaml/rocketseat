@@ -19,7 +19,7 @@ import {
   Fields,
   TransactionsTypes,
 } from './styled';
-import { StorageKeys } from '../../utils/StorageKeys';
+import { useAuth } from '../../hooks/useAuth';
 
 interface IRegisterData {
   name: string;
@@ -36,6 +36,7 @@ const schema = YUP.object().shape({
 
 export function Register() {
   const navigation = useNavigation();
+  const { user } = useAuth();
 
   const [transactionType, setTransactionType] = useState('');
   const [categoryModalOpen, setCategoryModalOpen] = useState(false);
@@ -85,12 +86,12 @@ export function Register() {
 
     try {
       const getStorageData = await AsyncStorage.getItem(
-        StorageKeys.transaction,
+        `@goFinances:transaction_user:${user.id}`,
       );
       const currentData = getStorageData ? JSON.parse(getStorageData) : [];
       const joinData = [...currentData, newData];
       await AsyncStorage.setItem(
-        StorageKeys.transaction,
+        `@goFinances:transaction_user:${user.id}`,
         JSON.stringify(joinData),
       );
 

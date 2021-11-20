@@ -34,6 +34,8 @@ interface IAuthContext {
   user: IUser;
   signInWithGoogle: () => Promise<void>;
   signInWithApple: () => Promise<void>;
+  signIOut: () => Promise<void>;
+  userStorageLoading: boolean;
 }
 
 const AuthContext = createContext({} as IAuthContext);
@@ -103,6 +105,11 @@ function AuthProvider({ children }: IAuthProvider) {
     }
   }
 
+  async function signIOut() {
+    setUser({} as IUser);
+    await AsyncStorage.removeItem('@gofinances:user');
+  }
+
   useEffect(() => {
     (async () => {
       const storageUser = await AsyncStorage.getItem('@gofinances:user');
@@ -115,7 +122,15 @@ function AuthProvider({ children }: IAuthProvider) {
 
   return (
     <>
-      <AuthContext.Provider value={{ user, signInWithGoogle, signInWithApple }}>
+      <AuthContext.Provider
+        value={{
+          user,
+          signInWithGoogle,
+          signInWithApple,
+          signIOut,
+          userStorageLoading,
+        }}
+      >
         {children}
       </AuthContext.Provider>
     </>

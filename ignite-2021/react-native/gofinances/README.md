@@ -234,3 +234,7 @@ npm install -g expo-cli
 ### Apple Authentication
 
 - [Documentation](https://docs.expo.dev/versions/latest/sdk/apple-authentication/)
+
+### User avatar
+
+- [Documentation](https://ui-avatars.com/)

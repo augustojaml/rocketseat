@@ -26,6 +26,7 @@ import {
   LoadContainer,
 } from './styled';
 import { StorageKeys } from '../../utils/StorageKeys';
+import { useAuth } from '../../hooks/useAuth';
 
 export interface ITransactionListProps extends ITransaction {
   id: string;
@@ -43,6 +44,7 @@ interface IHighlightData {
 
 export function Dashboard() {
   const theme = useTheme();
+  const { signIOut, user } = useAuth();
 
   const [transactions, setTransactions] = useState<ITransactionListProps[]>([]);
   const [highlightData, setHighlightData] = useState<IHighlightData>(
@@ -82,7 +84,9 @@ export function Dashboard() {
   }
 
   async function loadingTransactions() {
-    const getStorageData = await AsyncStorage.getItem(StorageKeys.transaction);
+    const getStorageData = await AsyncStorage.getItem(
+      `@goFinances:transaction_user:${user.id}`,
+    );
     const data = getStorageData ? JSON.parse(getStorageData) : [];
 
     let entriesTotal = 0;
@@ -175,14 +179,18 @@ export function Dashboard() {
               <UserWrapper>
                 <UserInfo>
                   <Photo
-                    source={{ uri: 'https://github.com/augustojaml.png' }}
+                    source={{
+                      uri: user.avatar
+                        ? user.avatar
+                        : `https://ui-avatars.com/api/?name=${user.name}`,
+                    }}
                   />
                   <User>
                     <UserGreeting>Olá, </UserGreeting>
-                    <UserName>Augusto Monteiro</UserName>
+                    <UserName>{user?.name}</UserName>
                   </User>
                 </UserInfo>
-                <LogoutButton>
+                <LogoutButton onPress={signIOut}>
                   <FeatherIcon name="power" />
                 </LogoutButton>
               </UserWrapper>

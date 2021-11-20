@@ -11,6 +11,7 @@ import { useTheme } from 'styled-components';
 import { VictoryPie } from 'victory-native';
 
 import { HistoryCard } from '../../components/HistoryCard';
+import { useAuth } from '../../hooks/useAuth';
 import { categories } from '../../utils/categories';
 import { StorageKeys } from '../../utils/StorageKeys';
 
@@ -46,6 +47,7 @@ interface ISumCategory {
 
 export function Resumo() {
   const theme = useTheme();
+  const { user } = useAuth();
   const [totalByCategories, setTotalByCategories] = useState<ISumCategory[]>(
     [],
   );
@@ -67,7 +69,9 @@ export function Resumo() {
 
   async function loadingData() {
     setIsLoading(true);
-    const getStorageData = await AsyncStorage.getItem(StorageKeys.transaction);
+    const getStorageData = await AsyncStorage.getItem(
+      `@goFinances:transaction_user:${user.id}`,
+    );
     const transactions: IHistoryCardData[] = getStorageData
       ? JSON.parse(getStorageData)
       : [];
