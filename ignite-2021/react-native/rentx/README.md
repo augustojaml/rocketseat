@@ -1,5 +1,7 @@
 # Rentx
 
+- [Figma](https://www.figma.com/file/m3uxV84FwHSTlxf3SpM68U/RentX-Ignite)
+
 ### Create you snippet
 
 - Go to file -> preferences -> User Snippets -> New Global Snippets file -> enter the name of the snippets
@@ -102,4 +104,12 @@
 - Install
   ```bash
   yarn add react-native-responsive-fontsize
+  ```
+
+### React Native Iphone X Helper
+
+- [Documentation](https://github.com/ptelad/react-native-iphone-x-helper)
+- install
+  ```bash
+  yarn add react-native-iphone-x-helper
   ```

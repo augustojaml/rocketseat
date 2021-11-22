@@ -4,7 +4,7 @@ import { RFValue } from 'react-native-responsive-fontsize';
 import { LogoSVG } from '../../assets';
 import { Car } from '../../components/Car';
 
-import { Container, HeaderContent, Header, TotalCars } from './styled';
+import { Container, HeaderContent, Header, TotalCars, Carlist } from './styled';
 
 export function Home() {
   //https://cdn.picpng.com/audi/audi-face-28582.png
@@ -16,17 +16,6 @@ export function Home() {
       price: 120,
     },
     thumbnail: 'https://cdn.picpng.com/audi/audi-face-28582.png',
-  };
-
-  const car2 = {
-    brand: 'Porsche',
-    name: 'Panamera',
-    rent: {
-      period: 'AO DIA',
-      price: 340,
-    },
-    thumbnail:
-      'https://purepng.com/public/uploads/large/purepng.com-red-porsche-panamera-carcarvehicletransportporsche-961524659425kg33i.png',
   };
 
   return (
@@ -43,8 +32,11 @@ export function Home() {
             <TotalCars>Total de 12 carros</TotalCars>
           </HeaderContent>
         </Header>
-        <Car car={car1} />
-        <Car car={car2} />
+        <Carlist
+          data={[1, 2, 3, 4, 6, 7, 8, 9, 10]}
+          keyExtractor={(item) => String(item)}
+          renderItem={(item) => <Car car={car1} />}
+        />
       </Container>
     </>
   );
