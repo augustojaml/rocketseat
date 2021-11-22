@@ -9,6 +9,7 @@ import {
 } from '../../assets';
 import { Accessory } from '../../components/Accessory';
 import { BackButton } from '../../components/BackButton';
+import { Button } from '../../components/Button';
 import { ImageSlider } from '../../components/ImageSlider';
 
 import {
@@ -25,6 +26,7 @@ import {
   Price,
   Accessories,
   About,
+  Footer,
 } from './styled';
 
 export function CarDetails() {
@@ -66,6 +68,9 @@ export function CarDetails() {
             para quem gosta de acelerar.
           </About>
         </Content>
+        <Footer>
+          <Button title="Confirmar" />
+        </Footer>
       </Container>
     </>
   );
