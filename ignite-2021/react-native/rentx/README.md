@@ -113,3 +113,12 @@
   ```bash
   yarn add react-native-iphone-x-helper
   ```
+
+### React Native Calendar
+
+- [Documentation](https://github.com/wix/react-native-calendars)
+- install
+
+```bash
+yarn install react-native-calendars
+```

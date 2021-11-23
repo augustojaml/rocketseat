@@ -17,6 +17,7 @@ import {
 import { Home } from './src/screens/Home';
 import { theme } from './src/styles/theme';
 import { CarDetails } from './src/screens/CarDetails';
+import { Schedules } from './src/screens/Schedules';
 
 export function App() {
   const [fontsLoaded] = useFonts({
@@ -34,7 +35,7 @@ export function App() {
   return (
     <>
       <ThemeProvider theme={theme}>
-        <CarDetails />
+        <Schedules />
       </ThemeProvider>
     </>
   );

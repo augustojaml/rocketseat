@@ -5,6 +5,7 @@ import AccelerationSVG from './acceleration.svg';
 import ForceSVG from './force.svg';
 import ExchangeSVG from './exchange.svg';
 import PeopleSVG from './people.svg';
+import ArrowSVG from './arrow.svg';
 
 export {
   LogoSVG,
@@ -14,4 +15,5 @@ export {
   ForceSVG,
   ExchangeSVG,
   PeopleSVG,
+  ArrowSVG,
 };
