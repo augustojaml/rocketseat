@@ -116,6 +116,7 @@
 
 ### React Native Calendar
 
+- "react-native-calendars": "^1.1269.0",
 - [Documentation](https://github.com/wix/react-native-calendars)
 - install
 

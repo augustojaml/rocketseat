@@ -33,7 +33,7 @@ import {
 import { ICarDTO } from '../../dtos/ICarDTO';
 import { Util } from '../../utils';
 
-interface ICarParams {
+export interface ICarParams {
   car: ICarDTO;
 }
 
@@ -42,7 +42,7 @@ export function CarDetails() {
   const { car } = useRoute().params as ICarParams;
 
   function handleConfirmRental() {
-    navigation.navigate('Schedules');
+    navigation.navigate('Schedules', { car });
   }
 
   function handleBack() {

@@ -1,16 +1,8 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Feather } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
-import {
-  AccelerationSVG,
-  ExchangeSVG,
-  ForceSVG,
-  GasolineSVG,
-  PeopleSVG,
-  SpeedSVG,
-} from '../../assets';
-
+import { Util } from '../../utils';
 import { Accessory } from '../../components/Accessory';
 import { BackButton } from '../../components/BackButton';
 import { Button } from '../../components/Button';
@@ -43,44 +35,105 @@ import {
 } from './styled';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { theme } from '../../styles/theme';
+import { ICarDTO } from '../../dtos/ICarDTO';
+import { format } from 'date-fns';
+import { api } from '../../services/api';
+import { Alert } from 'react-native';
+
+interface ICarParams {
+  car: ICarDTO;
+  dates: string[];
+}
+
+interface IRentalPeriod {
+  start: string;
+  end: string;
+}
 
 export function SchedulesDetails() {
   const navigation = useNavigation();
+  const { car, dates } = useRoute().params as ICarParams;
+  const [rentalPeriod, setRentalPeriod] = useState<IRentalPeriod>(
+    {} as IRentalPeriod
+  );
+  const [isLoading, setIsLoading] = useState(false);
 
-  function handleConfirmRental() {
-    navigation.navigate('SchedulesCompleted');
+  const rentalTotal = Number(dates.length * car.rent.price);
+
+  async function handleConfirmRental() {
+    setIsLoading(true);
+    const schedulesByCar = await api.get(`/schedules_bycars/${car.id}`);
+
+    const unavailable_dates = [
+      ...schedulesByCar.data.unavailable_dates,
+      ...dates,
+    ];
+
+    await api.post('/schedules_byuser', {
+      user_id: 1,
+      car,
+      startDate: format(Util.getPlatformDate(new Date(dates[0])), 'dd/MM/yyyy'),
+      endDate: format(
+        Util.getPlatformDate(new Date(dates[dates.length - 1])),
+        'dd/MM/yyyy'
+      ),
+    });
+
+    await api
+      .put(`/schedules_bycars/${car.id}`, {
+        id: car.id,
+        unavailable_dates,
+      })
+      .then((response) => navigation.navigate('SchedulesCompleted'))
+      .catch(() => {
+        Alert.alert('Não foi possivel confirmar o agendamento');
+        setIsLoading(false);
+      });
   }
+
+  function handleBack() {
+    navigation.goBack();
+  }
+
+  useEffect(() => {
+    setRentalPeriod({
+      start: format(Util.getPlatformDate(new Date(dates[0])), 'dd/MM/yyyy'),
+      end: format(
+        Util.getPlatformDate(new Date(dates[dates.length - 1])),
+        'dd/MM/yyyy'
+      ),
+    });
+  }, []);
 
   return (
     <>
       <Container>
         <Header>
-          <BackButton onPress={() => {}} />
+          <BackButton onPress={handleBack} />
         </Header>
         <CarImages>
-          <ImageSlider
-            imagesUrl={['https://pngimg.com/uploads/audi/audi_PNG99491.png']}
-          />
+          <ImageSlider imagesUrl={car.photos} />
         </CarImages>
         <Content>
           <Details>
             <Description>
-              <Brand>Lamborghini</Brand>
-              <Name>Huracan</Name>
+              <Brand>{car.brand}</Brand>
+              <Name>{car.name}</Name>
             </Description>
 
             <Rent>
-              <Period>Ao dia</Period>
-              <Price>R$ 580</Price>
+              <Period>{car.rent.period}</Period>
+              <Price>{`R$ ${car.rent.price}`}</Price>
             </Rent>
           </Details>
           <Accessories>
-            <Accessory name="380Km/h" icon={SpeedSVG} />
-            <Accessory name="3.2s" icon={AccelerationSVG} />
-            <Accessory name="800 HP" icon={ForceSVG} />
-            <Accessory name="Gasolina" icon={GasolineSVG} />
-            <Accessory name="Auto" icon={ExchangeSVG} />
-            <Accessory name="2 Pessoa" icon={PeopleSVG} />
+            {car.accessories.map((accessory) => (
+              <Accessory
+                key={accessory.type}
+                name={accessory.name}
+                icon={Util.getAccessoryIcon(accessory.type)}
+              />
+            ))}
           </Accessories>
           <RentalPeriod>
             <CalendarIcon>
@@ -93,7 +146,7 @@ export function SchedulesDetails() {
 
             <DateInfo>
               <DateTitle>DE</DateTitle>
-              <DateValue>18/06/2021</DateValue>
+              <DateValue>{rentalPeriod.start}</DateValue>
             </DateInfo>
 
             <Feather
@@ -103,15 +156,15 @@ export function SchedulesDetails() {
             />
 
             <DateInfo>
-              <DateTitle>DE</DateTitle>
-              <DateValue>18/06/2021</DateValue>
+              <DateTitle>ATÉ</DateTitle>
+              <DateValue>{rentalPeriod.end}</DateValue>
             </DateInfo>
           </RentalPeriod>
           <RentalPrice>
             <RentalPriceLabel>TOTAL</RentalPriceLabel>
             <RentalPriceDetails>
-              <RentalPriceQuota>R$ 580 x3 diárias</RentalPriceQuota>
-              <RentalPriceTotal>R$ 2.900</RentalPriceTotal>
+              <RentalPriceQuota>{`R$ ${car.rent.price} x${dates.length} diárias`}</RentalPriceQuota>
+              <RentalPriceTotal>{`R$ ${rentalTotal}`}</RentalPriceTotal>
             </RentalPriceDetails>
           </RentalPrice>
         </Content>
@@ -121,6 +174,8 @@ export function SchedulesDetails() {
             title="Alugar Agora"
             color={theme.colors.success}
             onPress={handleConfirmRental}
+            enabled={!isLoading}
+            isLoading={isLoading}
           />
         </Footer>
       </Container>
