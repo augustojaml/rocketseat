@@ -6,6 +6,7 @@ import { CarDetails } from '../screens/CarDetails';
 import { Schedules } from '../screens/Schedules';
 import { SchedulesDetails } from '../screens/SchedulesDetails';
 import { SchedulesCompleted } from '../screens/SchedulesCompleted';
+import { ICarDTO } from '../dtos/ICarDTO';
 
 const { Navigator, Screen } = createNativeStackNavigator();
 
@@ -13,7 +14,7 @@ declare global {
   namespace ReactNavigation {
     interface RootParamList {
       Home: undefined;
-      CarDetails: undefined;
+      CarDetails: { car: ICarDTO };
       Schedules: undefined;
       SchedulesDetails: undefined;
       SchedulesCompleted: undefined;

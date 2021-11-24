@@ -126,3 +126,24 @@ yarn install react-native-calendars
 ### React Navigation
 
 - [Documentation](https://reactnavigation.org/)
+
+### Json Server
+
+- [Documentation](https://github.com/typicode/json-server)
+- install
+  ```bash
+  yarn add json-server -D
+  ```
+- usage - add in file `package.json` in scripts
+  ````bash
+  "json-server": "json-server ./src/services/server.json --host 192.168.100.5 --port 3333 --delay 700"
+  ```
+  ````
+
+### Axios
+
+- [Documentation](https://github.com/axios/axios)
+- Install
+  ```bash
+  yarn add axios
+  ```

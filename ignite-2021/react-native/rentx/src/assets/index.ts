@@ -1,6 +1,8 @@
 import LogoSVG from './logo.svg';
 import GasolineSVG from './gasoline.svg';
+import EnergySVG from './energy.svg';
 import SpeedSVG from './speed.svg';
+import HybridSVG from './hybrid.svg';
 import AccelerationSVG from './acceleration.svg';
 import ForceSVG from './force.svg';
 import ExchangeSVG from './exchange.svg';
@@ -9,6 +11,7 @@ import ArrowSVG from './arrow.svg';
 import BrandSVG from './brand.svg';
 import LogoBackgroundGraySVG from './logo_background_gray.svg';
 import DoneSVG from './done.svg';
+import CarSVG from './car.svg';
 
 export {
   LogoSVG,
@@ -22,4 +25,7 @@ export {
   BrandSVG,
   LogoBackgroundGraySVG,
   DoneSVG,
+  EnergySVG,
+  HybridSVG,
+  CarSVG,
 };
