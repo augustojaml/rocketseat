@@ -6,6 +6,8 @@ import { CarDetails } from '../screens/CarDetails';
 import { Schedules } from '../screens/Schedules';
 import { SchedulesDetails } from '../screens/SchedulesDetails';
 import { SchedulesCompleted } from '../screens/SchedulesCompleted';
+import { Splash } from '../screens/Splash';
+
 import { MyCars } from '../screens/MyCars';
 import { ICarDTO } from '../dtos/ICarDTO';
 
@@ -20,6 +22,7 @@ declare global {
       SchedulesDetails: { car: ICarDTO; dates: string[] };
       SchedulesCompleted: undefined;
       MyCars: undefined;
+      Splash: undefined;
     }
   }
 }
@@ -27,7 +30,11 @@ declare global {
 export function StackRoutes() {
   return (
     <>
-      <Navigator screenOptions={{ headerShown: false }}>
+      <Navigator
+        initialRouteName={'Splash'}
+        screenOptions={{ headerShown: false }}
+      >
+        <Screen name="Splash" component={Splash} />
         <Screen name="Home" component={Home} />
         <Screen name="CarDetails" component={CarDetails} />
         <Screen name="Schedules" component={Schedules} />

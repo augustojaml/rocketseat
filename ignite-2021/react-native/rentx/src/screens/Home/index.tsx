@@ -60,7 +60,9 @@ export function Home() {
         <Header>
           <HeaderContent>
             <LogoSVG width={RFValue(108)} height={RFValue(12)} />
-            <TotalCars>Total de 12 carros</TotalCars>
+            <TotalCars>
+              Total de {String(cars.length).padStart(2, '0')} carros
+            </TotalCars>
           </HeaderContent>
         </Header>
         {isLoading ? (

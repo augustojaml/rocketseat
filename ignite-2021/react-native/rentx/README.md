@@ -148,3 +148,12 @@ yarn install react-native-calendars
   ```bash
   yarn add axios
   ```
+
+### React Native Reanimated
+
+- [Documentation](https://docs.swmansion.com/react-native-reanimated/)
+
+### Splash Screen
+
+- [Documentation](https://docs.expo.dev/guides/splash-screens/)
+- [Documentation](https://docs.expo.dev/versions/latest/sdk/splash-screen/)
