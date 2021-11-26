@@ -1,7 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { StatusBar } from 'react-native';
+import { StatusBar, BackHandler } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
+
+import Animated, {
+  useAnimatedGestureHandler,
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+} from 'react-native-reanimated';
 
 import { RFValue } from 'react-native-responsive-fontsize';
 import { LogoSVG } from '../../assets';
@@ -19,10 +26,41 @@ import { api } from '../../services/api';
 import { ICarDTO } from '../../dtos/ICarDTO';
 import { Loading } from '../../components/Loading';
 import { useTheme } from 'styled-components';
+import { PanGestureHandler, RectButton } from 'react-native-gesture-handler';
+import { CarAnimated } from '../../components/CarAnimated';
+
+const ButtonAnimated = Animated.createAnimatedComponent(RectButton);
 
 export function Home() {
   const navigation = useNavigation();
   const theme = useTheme();
+
+  const positionX = useSharedValue(0);
+  const positionY = useSharedValue(0);
+
+  const myCarsButtonStyle = useAnimatedStyle(() => {
+    return {
+      transform: [
+        { translateX: positionX.value },
+        { translateY: positionY.value },
+      ],
+    };
+  });
+
+  const onGestureEvent = useAnimatedGestureHandler({
+    onStart(_, ctx: any) {
+      ctx.positionX = positionX.value;
+      ctx.positionY = positionY.value;
+    },
+    onActive(event, ctx: any) {
+      positionX.value = withSpring(ctx.positionX + event.translationX);
+      positionY.value = withSpring(ctx.positionY + event.translationY);
+    },
+    onEnd() {
+      // positionX.value = withSpring(0);
+      // positionY.value = withSpring(0);
+    },
+  });
 
   const [cars, setCars] = useState<ICarDTO[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -49,6 +87,12 @@ export function Home() {
     })();
   }, []);
 
+  useEffect(() => {
+    BackHandler.addEventListener('hardwareBackPress', () => {
+      return true;
+    });
+  }, []);
+
   return (
     <>
       <StatusBar
@@ -60,13 +104,15 @@ export function Home() {
         <Header>
           <HeaderContent>
             <LogoSVG width={RFValue(108)} height={RFValue(12)} />
-            <TotalCars>
-              Total de {String(cars.length).padStart(2, '0')} carros
-            </TotalCars>
+            {!isLoading && (
+              <TotalCars>
+                Total de {String(cars.length).padStart(2, '0')} carros
+              </TotalCars>
+            )}
           </HeaderContent>
         </Header>
         {isLoading ? (
-          <Loading />
+          <CarAnimated />
         ) : (
           <CarList
             data={cars}
@@ -76,10 +122,51 @@ export function Home() {
             )}
           />
         )}
-        <MyCarsButton onPress={handleOpenMyCars}>
-          <Ionicons name="ios-car-sport" size={32} color={theme.colors.shape} />
-        </MyCarsButton>
+        <PanGestureHandler onGestureEvent={onGestureEvent}>
+          <Animated.View
+            style={[
+              myCarsButtonStyle,
+              {
+                position: 'absolute',
+                bottom: 24,
+                right: 24,
+              },
+            ]}
+          >
+            <ButtonAnimated
+              onPress={handleOpenMyCars}
+              style={[
+                {
+                  width: 60,
+                  height: 60,
+                  borderRadius: 30,
+                  backgroundColor: theme.colors.main,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                },
+              ]}
+            >
+              <Ionicons
+                name="ios-car-sport"
+                size={32}
+                color={theme.colors.shape}
+              />
+            </ButtonAnimated>
+          </Animated.View>
+        </PanGestureHandler>
       </Container>
     </>
   );
 }
+
+/**
+ * width: 60,
+  height: 60,
+  borderRadius: 30,
+  background-color: theme.colors.main,
+  alignItems: 'center',
+  justifyContent: 'center',
+  position: 'absolute',
+  bottom: 24,
+  right: 24
+ */

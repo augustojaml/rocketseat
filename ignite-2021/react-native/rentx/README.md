@@ -157,3 +157,8 @@ yarn install react-native-calendars
 
 - [Documentation](https://docs.expo.dev/guides/splash-screens/)
 - [Documentation](https://docs.expo.dev/versions/latest/sdk/splash-screen/)
+
+### Lottie Animated
+
+- [Documentation](https://lottiefiles.com/)
+- [Documentation](https://docs.expo.dev/versions/latest/sdk/lottie/)

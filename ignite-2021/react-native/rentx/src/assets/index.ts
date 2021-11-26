@@ -12,6 +12,7 @@ import BrandSVG from './brand.svg';
 import LogoBackgroundGraySVG from './logo_background_gray.svg';
 import DoneSVG from './done.svg';
 import CarSVG from './car.svg';
+import car_animated from './car_animated.json';
 
 export {
   LogoSVG,
@@ -28,4 +29,5 @@ export {
   EnergySVG,
   HybridSVG,
   CarSVG,
+  car_animated,
 };
