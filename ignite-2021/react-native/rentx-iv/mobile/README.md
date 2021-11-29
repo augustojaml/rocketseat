@@ -162,3 +162,7 @@ yarn install react-native-calendars
 
 - [Documentation](https://lottiefiles.com/)
 - [Documentation](https://docs.expo.dev/versions/latest/sdk/lottie/)
+
+### YUP
+
+- [Documentation](https://github.com/jquense/yup)

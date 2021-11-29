@@ -11,6 +11,8 @@ import { Splash } from '../screens/Splash';
 import { MyCars } from '../screens/MyCars';
 import { ICarDTO } from '../dtos/ICarDTO';
 import { SignIn } from '../screens/SignIn';
+import { SignUpFirstStep } from '../screens/SignUp/SignUpFirstStep';
+import { SignUpSecondStep } from '../screens/SignUp/SignUpSecondStep';
 
 const { Navigator, Screen } = createNativeStackNavigator();
 
@@ -25,6 +27,8 @@ declare global {
       MyCars: undefined;
       Splash: undefined;
       SignIn: undefined;
+      SignUpFirstStep: undefined;
+      SignUpSecondStep: { addUser: IAddUserDTO };
     }
   }
 }
@@ -37,16 +41,26 @@ export function StackRoutes() {
         screenOptions={{ headerShown: false }}
       >
         <Screen name="SignIn" component={SignIn} />
+
+        <Screen name="SignUpFirstStep" component={SignUpFirstStep} />
+        <Screen name="SignUpSecondStep" component={SignUpSecondStep} />
+
         <Screen name="Splash" component={Splash} />
+
         <Screen
           name="Home"
           component={Home}
           options={{ gestureEnabled: false }}
         />
+
         <Screen name="CarDetails" component={CarDetails} />
+
         <Screen name="Schedules" component={Schedules} />
+
         <Screen name="SchedulesDetails" component={SchedulesDetails} />
+
         <Screen name="SchedulesCompleted" component={SchedulesCompleted} />
+
         <Screen name="MyCars" component={MyCars} />
       </Navigator>
     </>
