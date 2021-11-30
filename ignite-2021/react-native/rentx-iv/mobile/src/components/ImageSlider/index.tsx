@@ -10,7 +10,10 @@ import {
 } from './styled';
 
 interface IImageSlider {
-  imagesUrl: string[];
+  imagesUrl: {
+    id: string;
+    photo: string;
+  }[];
 }
 
 interface IChangeImage {
@@ -30,21 +33,21 @@ export function ImageSlider({ imagesUrl }: IImageSlider) {
     <>
       <Container>
         <ImageIndexes>
-          {imagesUrl.map((_, index) => (
-            <ImageIndex key={String(index)} active={imageIndex === index} />
+          {imagesUrl.map((item, index) => (
+            <ImageIndex key={String(item.id)} active={imageIndex === index} />
           ))}
         </ImageIndexes>
 
         <FlatList
           data={imagesUrl}
-          keyExtractor={(key) => key}
+          keyExtractor={(item) => item.id}
           horizontal
           showsHorizontalScrollIndicator={false}
           onViewableItemsChanged={indexChanged.current}
           renderItem={({ item }) => (
             <>
               <CarImageWrapper>
-                <CarImage source={{ uri: item }} />
+                <CarImage source={{ uri: item.photo }} />
               </CarImageWrapper>
             </>
           )}

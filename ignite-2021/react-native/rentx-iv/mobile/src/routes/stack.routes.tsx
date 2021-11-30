@@ -5,7 +5,7 @@ import { Home } from '../screens/Home';
 import { CarDetails } from '../screens/CarDetails';
 import { Schedules } from '../screens/Schedules';
 import { SchedulesDetails } from '../screens/SchedulesDetails';
-import { SchedulesCompleted } from '../screens/SchedulesCompleted';
+import { Confirmation } from '../screens/Confirmation';
 import { Splash } from '../screens/Splash';
 
 import { MyCars } from '../screens/MyCars';
@@ -16,6 +16,12 @@ import { SignUpSecondStep } from '../screens/SignUp/SignUpSecondStep';
 
 const { Navigator, Screen } = createNativeStackNavigator();
 
+interface IConfirmation {
+  title: string;
+  message: string;
+  nextScreenRoute: keyof ReactNavigation.RootParamList;
+}
+
 declare global {
   namespace ReactNavigation {
     interface RootParamList {
@@ -23,7 +29,7 @@ declare global {
       CarDetails: { car: ICarDTO };
       Schedules: { car: ICarDTO };
       SchedulesDetails: { car: ICarDTO; dates: string[] };
-      SchedulesCompleted: undefined;
+      Confirmation: IConfirmation;
       MyCars: undefined;
       Splash: undefined;
       SignIn: undefined;
@@ -37,7 +43,7 @@ export function StackRoutes() {
   return (
     <>
       <Navigator
-        initialRouteName={'SignIn'}
+        initialRouteName={'Home'}
         screenOptions={{ headerShown: false }}
       >
         <Screen name="SignIn" component={SignIn} />
@@ -59,7 +65,7 @@ export function StackRoutes() {
 
         <Screen name="SchedulesDetails" component={SchedulesDetails} />
 
-        <Screen name="SchedulesCompleted" component={SchedulesCompleted} />
+        <Screen name="Confirmation" component={Confirmation} />
 
         <Screen name="MyCars" component={MyCars} />
       </Navigator>

@@ -13,12 +13,14 @@ import * as YUP from 'yup';
 import { Button } from '../../components/Button';
 import { Input } from '../../components/Input';
 import { InputPassword } from '../../components/InputPassword';
+import { useAuth } from '../../hooks/useAuth';
 
 import { Container, Header, SubTitle, Title, Form, Footer } from './styled';
 
 export function SignIn() {
   const theme = useTheme();
   const navigation = useNavigation();
+  const { signIn } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -32,7 +34,9 @@ export function SignIn() {
       });
 
       await schema.validate({ email, password });
-      Alert.alert('Tudo certo');
+      await signIn({ email, password });
+
+      // Alert.alert('Tudo certo');
     } catch (err) {
       if (err instanceof YUP.ValidationError) {
         return Alert.alert('Opa', err.message);
