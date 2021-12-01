@@ -23,7 +23,6 @@ import {
 } from 'react-native';
 
 import * as YUP from 'yup';
-import { useAuth } from '../../../hooks/useAuth';
 
 export function SignUpFirstStep() {
   const navigation = useNavigation();

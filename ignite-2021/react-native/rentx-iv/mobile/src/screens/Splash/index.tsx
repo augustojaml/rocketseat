@@ -13,6 +13,7 @@ import { BrandSVG, LogoSVG } from '../../assets';
 import { Container } from './styled';
 
 export function Splash() {
+  console.log('Splash', 'splash');
   const navigation = useNavigation();
 
   const splashAnimation = useSharedValue(0);
@@ -38,7 +39,7 @@ export function Splash() {
   });
 
   function startApp() {
-    navigation.navigate('Home');
+    navigation.navigate('SignIn');
   }
 
   useEffect(() => {
