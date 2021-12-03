@@ -26,17 +26,27 @@ export function Home() {
   }
 
   useEffect(() => {
+    let isMounted = true;
+
     (async () => {
       try {
         setIsLoading(true);
         const response = await api.get('cars');
-        setCars(response.data);
+        if (isMounted) {
+          setCars(response.data);
+        }
       } catch (error) {
         console.log(error);
       } finally {
-        setIsLoading(false);
+        if (isMounted) {
+          setIsLoading(false);
+        }
       }
     })();
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   return (

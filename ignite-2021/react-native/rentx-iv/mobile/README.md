@@ -167,8 +167,11 @@ yarn install react-native-calendars
 
 - [Documentation](https://github.com/jquense/yup)
 
-
 ### Banco de Dados
 
 - [Documentation](https://github.com/Nozbe/WatermelonDB)
 - [Documentation](https://nozbe.github.io/WatermelonDB/)
+
+### Expo Image Picker
+
+- [Documentation](https://docs.expo.dev/versions/latest/sdk/imagepicker/)

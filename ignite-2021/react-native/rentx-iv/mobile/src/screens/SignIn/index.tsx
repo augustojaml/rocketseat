@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
   StatusBar,
   KeyboardAvoidingView,
@@ -13,7 +13,6 @@ import * as YUP from 'yup';
 import { Button } from '../../components/Button';
 import { Input } from '../../components/Input';
 import { InputPassword } from '../../components/InputPassword';
-import { database } from '../../database';
 import { useAuth } from '../../hooks/useAuth';
 
 import { Container, Header, SubTitle, Title, Form, Footer } from './styled';
@@ -53,14 +52,6 @@ export function SignIn() {
   function handleNewAccount() {
     navigation.navigate('SignUpFirstStep');
   }
-
-  useEffect(() => {
-    (async () => {
-      const userCollection = database.get('users');
-      const users = await userCollection.query().fetch();
-      console.log(users);
-    })();
-  }, []);
 
   return (
     <>
