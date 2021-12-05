@@ -9,6 +9,7 @@ import { Confirmation } from '../screens/Confirmation';
 
 import { MyCars } from '../screens/MyCars';
 import { ICarDTO } from '../dtos/ICarDTO';
+import { Car } from '../database/model/Car';
 
 const { Navigator, Screen } = createNativeStackNavigator();
 
@@ -22,7 +23,7 @@ declare global {
   namespace ReactNavigation {
     interface RootParamList {
       Home: undefined;
-      CarDetails: { car: ICarDTO };
+      CarDetails: { car: Car };
       Schedules: { car: ICarDTO };
       SchedulesDetails: { car: ICarDTO; dates: string[] };
       Confirmation: IConfirmation;

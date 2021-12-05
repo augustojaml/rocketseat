@@ -51,12 +51,7 @@ export function CarDetails() {
 
   const headerStyleAnimation = useAnimatedStyle(() => {
     return {
-      height: interpolate(
-        scrollY.value,
-        [0, 200],
-        [200, 70],
-        Extrapolate.CLAMP
-      ),
+      height: interpolate(scrollY.value, [0, 200], [200, 70], Extrapolate.CLAMP),
     };
   });
 
@@ -76,11 +71,7 @@ export function CarDetails() {
 
   return (
     <>
-      <StatusBar
-        barStyle="dark-content"
-        translucent
-        backgroundColor="transparent"
-      />
+      <StatusBar barStyle="dark-content" translucent backgroundColor="transparent" />
       <Container>
         <Animated.View
           style={[
@@ -122,11 +113,7 @@ export function CarDetails() {
           </Details>
           <Accessories>
             {car.accessories.map((accessory) => (
-              <Accessory
-                key={accessory.type}
-                name={accessory.name}
-                icon={Util.getAccessoryIcon(accessory.type)}
-              />
+              <Accessory key={accessory.type} name={accessory.name} icon={Util.getAccessoryIcon(accessory.type)} />
             ))}
           </Accessories>
 
@@ -141,10 +128,7 @@ export function CarDetails() {
           </About>
         </Animated.ScrollView>
         <Footer>
-          <Button
-            title="Escolher período do aluguel"
-            onPress={handleConfirmRental}
-          />
+          <Button title="Escolher período do aluguel" onPress={handleConfirmRental} />
         </Footer>
       </Container>
     </>

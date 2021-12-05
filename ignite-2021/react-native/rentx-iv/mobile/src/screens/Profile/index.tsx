@@ -2,6 +2,7 @@ import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import * as ImagePicker from 'expo-image-picker';
+import * as YUP from 'yup';
 
 import { useTheme } from 'styled-components';
 import { BackButton } from '../../components/BackButton';
@@ -23,19 +24,15 @@ import {
   Section,
 } from './styled';
 import { Input } from '../../components/Input';
-import {
-  Keyboard,
-  KeyboardAvoidingView,
-  StatusBar,
-  TouchableWithoutFeedback,
-} from 'react-native';
+import { Alert, Keyboard, KeyboardAvoidingView, StatusBar, TouchableWithoutFeedback } from 'react-native';
 import { InputPassword } from '../../components/InputPassword';
 import { useAuth } from '../../hooks/useAuth';
+import { Button } from '../../components/Button';
 
 export function Profile() {
   const theme = useTheme();
   const navigation = useNavigation();
-  const { user } = useAuth();
+  const { user, signOut, updateUser } = useAuth();
 
   const [option, setOption] = useState<'dataEdit' | 'passwordEdit'>('dataEdit');
   const [name, setName] = useState(user.name);
@@ -47,7 +44,17 @@ export function Profile() {
   }
 
   function handleSignOut() {
-    console.log('handleSignOut');
+    Alert.alert('Tem certeza?', 'Se você sair irá precisar de internet para se conectar novamente', [
+      {
+        text: 'Cancelar',
+        onPress: () => {},
+        style: 'cancel',
+      },
+      {
+        text: 'Sim',
+        onPress: () => signOut(),
+      },
+    ]);
   }
 
   function handleOptionChange(option: 'dataEdit' | 'passwordEdit') {
@@ -71,13 +78,38 @@ export function Profile() {
     }
   }
 
+  async function handleProfileUpdate() {
+    try {
+      const schema = YUP.object().shape({
+        name: YUP.string().required('Nome é Obrigatorio'),
+        driverLicense: YUP.string().required('CNH é obrigatório'),
+      });
+
+      await schema.validate({ name, driverLicense });
+
+      await updateUser({
+        id: user.id,
+        user_id: user.user_id,
+        email: user.email,
+        name: name,
+        driver_license: driverLicense,
+        avatar: avatar,
+        token: user.token,
+      });
+
+      Alert.alert('Perfil atualizado');
+    } catch (err) {
+      if (err instanceof YUP.ValidationError) {
+        return Alert.alert('Opa', err.message);
+      } else {
+        Alert.alert('Error na Atualização', 'Não foi  possível atualizar o perfil');
+      }
+    }
+  }
+
   return (
     <>
-      <StatusBar
-        barStyle="dark-content"
-        translucent
-        backgroundColor="transparent"
-      />
+      <StatusBar barStyle="dark-content" translucent backgroundColor="transparent" />
       <KeyboardAvoidingView behavior="position" enabled>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <Container>
@@ -90,7 +122,7 @@ export function Profile() {
                 </LogoutButton>
               </HeaderTop>
               <PhotoContainer>
-                {avatar && <Photo source={{ uri: avatar }} />}
+                {avatar !== '' && <Photo source={{ uri: avatar }} />}
                 <PhotoButton onPress={handleChangeAvatar}>
                   <Feather name="camera" size={24} color={theme.colors.shape} />
                 </PhotoButton>
@@ -102,21 +134,11 @@ export function Profile() {
               }}
             >
               <Options>
-                <Option
-                  active={option === 'dataEdit'}
-                  onPress={() => handleOptionChange('dataEdit')}
-                >
-                  <OptionTitle active={option === 'dataEdit'}>
-                    Dados
-                  </OptionTitle>
+                <Option active={option === 'dataEdit'} onPress={() => handleOptionChange('dataEdit')}>
+                  <OptionTitle active={option === 'dataEdit'}>Dados</OptionTitle>
                 </Option>
-                <Option
-                  active={option === 'passwordEdit'}
-                  onPress={() => handleOptionChange('passwordEdit')}
-                >
-                  <OptionTitle active={option === 'passwordEdit'}>
-                    Trocar Senha
-                  </OptionTitle>
+                <Option active={option === 'passwordEdit'} onPress={() => handleOptionChange('passwordEdit')}>
+                  <OptionTitle active={option === 'passwordEdit'}>Trocar Senha</OptionTitle>
                 </Option>
               </Options>
 
@@ -129,11 +151,7 @@ export function Profile() {
                     defaultValue={user.name}
                     onChangeText={setName}
                   />
-                  <Input
-                    iconName="mail"
-                    editable={false}
-                    defaultValue={user.email}
-                  />
+                  <Input iconName="mail" editable={false} defaultValue={user.email} />
                   <Input
                     iconName="credit-card"
                     placeholder="CNH"
@@ -146,12 +164,10 @@ export function Profile() {
                 <Section>
                   <InputPassword iconName="lock" placeholder="Senha atual" />
                   <InputPassword iconName="mail" placeholder="Nova senha" />
-                  <InputPassword
-                    iconName="credit-card"
-                    placeholder="Repedir senha"
-                  />
+                  <InputPassword iconName="credit-card" placeholder="Repedir senha" />
                 </Section>
               )}
+              <Button title="Salvar alterações" onPress={handleProfileUpdate} />
             </Content>
           </Container>
         </TouchableWithoutFeedback>

@@ -3,6 +3,7 @@ import { RectButtonProps } from 'react-native-gesture-handler';
 import { GasolineSVG } from '../../assets';
 import { ICarDTO } from '../../dtos/ICarDTO';
 import { Util } from '../../utils';
+import { Car as CarModel } from '../../database/model/Car';
 
 import {
   Container,
@@ -18,7 +19,7 @@ import {
 } from './styled';
 
 interface ICarProps extends RectButtonProps {
-  car: ICarDTO;
+  car: CarModel;
 }
 
 export function Car({ car, ...rest }: ICarProps) {
@@ -40,7 +41,10 @@ export function Car({ car, ...rest }: ICarProps) {
             </Type>
           </About>
         </Details>
-        <CarImage source={{ uri: car.thumbnail }} />
+        <CarImage
+          source={{ uri: String(car.thumbnail) }}
+          resizeMode="contain"
+        />
       </Container>
     </>
   );

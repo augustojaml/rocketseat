@@ -175,3 +175,7 @@ yarn install react-native-calendars
 ### Expo Image Picker
 
 - [Documentation](https://docs.expo.dev/versions/latest/sdk/imagepicker/)
+
+### NetInfo
+
+- [Documentation](https://docs.expo.dev/versions/latest/sdk/netinfo/)

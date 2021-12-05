@@ -3,15 +3,18 @@ import { NavigationContainer } from '@react-navigation/native';
 import { useAuth } from '../hooks/useAuth';
 import { AppTabRoutes } from './app.tab.routes';
 import { AuthRoutes } from './auth.routes';
+import { Loading } from '../components/Loading';
 
 export function Routes() {
-  const { user } = useAuth();
+  const { user, isLoading } = useAuth();
 
   return (
     <>
-      <NavigationContainer>
-        {user.id ? <AppTabRoutes /> : <AuthRoutes />}
-      </NavigationContainer>
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <NavigationContainer>{user.id ? <AppTabRoutes /> : <AuthRoutes />}</NavigationContainer>
+      )}
     </>
   );
 }
