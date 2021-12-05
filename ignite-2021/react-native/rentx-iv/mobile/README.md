@@ -179,3 +179,7 @@ yarn install react-native-calendars
 ### NetInfo
 
 - [Documentation](https://docs.expo.dev/versions/latest/sdk/netinfo/)
+
+### FastImage
+
+- [Documentation](https://github.com/DylanVann/react-native-fast-image)

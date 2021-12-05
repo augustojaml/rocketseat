@@ -24,8 +24,8 @@ declare global {
     interface RootParamList {
       Home: undefined;
       CarDetails: { car: Car };
-      Schedules: { car: ICarDTO };
-      SchedulesDetails: { car: ICarDTO; dates: string[] };
+      Schedules: { car: Car };
+      SchedulesDetails: { car: Car; dates: string[] };
       Confirmation: IConfirmation;
       MyCars: undefined;
     }
@@ -35,15 +35,8 @@ declare global {
 export function AppStackRoutes() {
   return (
     <>
-      <Navigator
-        initialRouteName={'Home'}
-        screenOptions={{ headerShown: false }}
-      >
-        <Screen
-          name="Home"
-          component={Home}
-          options={{ gestureEnabled: false }}
-        />
+      <Navigator initialRouteName={'Home'} screenOptions={{ headerShown: false }}>
+        <Screen name="Home" component={Home} options={{ gestureEnabled: false }} />
 
         <Screen name="CarDetails" component={CarDetails} />
 

@@ -5,48 +5,34 @@ import { useTheme } from 'styled-components';
 import { ArrowSVG } from '../../assets';
 import { BackButton } from '../../components/BackButton';
 import { Button } from '../../components/Button';
-import {
-  Calendar,
-  generateInterval,
-  IDayProps,
-  IMarkedDates,
-} from '../../components/Calendar';
+import { Calendar, generateInterval, IDayProps, IMarkedDates } from '../../components/Calendar';
 
-import {
-  Container,
-  Header,
-  Title,
-  RentalPeriod,
-  DateInfo,
-  DateTitle,
-  DateValue,
-  Content,
-  Footer,
-} from './styled';
+import { Container, Header, Title, RentalPeriod, DateInfo, DateTitle, DateValue, Content, Footer } from './styled';
 import { Util } from '../../utils';
 import { format } from 'date-fns';
 import { ICarParams } from '../CarDetails';
+import { ICarDTO } from '../../dtos/ICarDTO';
 
 interface IRentalPeriod {
   startFormatted: string;
   endFormatted: string;
 }
 
-export function Schedules() {
-  const [lastSelectedDate, setLastSelectedDate] = useState<IDayProps>(
-    {} as IDayProps
-  );
-  const [markedDates, setMarkedDates] = useState<IMarkedDates>(
-    {} as IMarkedDates
-  );
+import { Car as CarModel } from '../../database/model/Car';
 
-  const [rentalPeriod, setRentalPeriod] = useState<IRentalPeriod>(
-    {} as IRentalPeriod
-  );
+interface Params {
+  car: CarModel;
+}
+
+export function Schedules() {
+  const [lastSelectedDate, setLastSelectedDate] = useState<IDayProps>({} as IDayProps);
+  const [markedDates, setMarkedDates] = useState<IMarkedDates>({} as IMarkedDates);
+
+  const [rentalPeriod, setRentalPeriod] = useState<IRentalPeriod>({} as IRentalPeriod);
 
   const theme = useTheme();
   const navigation = useNavigation();
-  const { car } = useRoute().params as ICarParams;
+  const { car } = useRoute().params as Params;
 
   function handleConfirmRental() {
     navigation.navigate('SchedulesDetails', {
@@ -76,24 +62,14 @@ export function Schedules() {
     const endDate = Object.keys(interval)[Object.keys(interval).length - 1];
 
     setRentalPeriod({
-      startFormatted: format(
-        Util.getPlatformDate(new Date(firstDate)),
-        'dd/MM/yyyy'
-      ),
-      endFormatted: format(
-        Util.getPlatformDate(new Date(endDate)),
-        'dd/MM/yyyy'
-      ),
+      startFormatted: format(Util.getPlatformDate(new Date(firstDate)), 'dd/MM/yyyy'),
+      endFormatted: format(Util.getPlatformDate(new Date(endDate)), 'dd/MM/yyyy'),
     });
   }
 
   return (
     <>
-      <StatusBar
-        barStyle="light-content"
-        translucent
-        backgroundColor="transparent"
-      />
+      <StatusBar barStyle="light-content" translucent backgroundColor="transparent" />
       <Container>
         <Header>
           <BackButton onPress={handleBack} color={theme.colors.shape} />
@@ -105,16 +81,12 @@ export function Schedules() {
           <RentalPeriod>
             <DateInfo>
               <DateTitle>DE</DateTitle>
-              <DateValue selected={!!rentalPeriod.startFormatted}>
-                {rentalPeriod.startFormatted}
-              </DateValue>
+              <DateValue selected={!!rentalPeriod.startFormatted}>{rentalPeriod.startFormatted}</DateValue>
             </DateInfo>
             <ArrowSVG />
             <DateInfo>
               <DateTitle>DE</DateTitle>
-              <DateValue selected={!!rentalPeriod.endFormatted}>
-                {rentalPeriod.endFormatted}
-              </DateValue>
+              <DateValue selected={!!rentalPeriod.endFormatted}>{rentalPeriod.endFormatted}</DateValue>
             </DateInfo>
           </RentalPeriod>
         </Header>
@@ -122,11 +94,7 @@ export function Schedules() {
           <Calendar markedDates={markedDates} onDayPress={handleChangerDate} />
         </Content>
         <Footer>
-          <Button
-            title="Confirmar"
-            enabled={!!rentalPeriod.endFormatted}
-            onPress={handleConfirmRental}
-          />
+          <Button title="Confirmar" enabled={!!rentalPeriod.endFormatted} onPress={handleConfirmRental} />
         </Footer>
       </Container>
     </>

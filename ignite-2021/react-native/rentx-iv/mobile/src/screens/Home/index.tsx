@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, StatusBar } from 'react-native';
+import { StatusBar } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useNetInfo } from '@react-native-community/netinfo';
 import { RFValue } from 'react-native-responsive-fontsize';

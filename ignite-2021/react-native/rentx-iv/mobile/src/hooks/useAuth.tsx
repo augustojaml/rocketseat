@@ -103,6 +103,7 @@ function AuthProvider({ children }: IAuthProvider) {
     (async () => {
       const userCollection = database.get<UserModel>('users');
       const response = await userCollection.query().fetch();
+
       if (response.length > 0) {
         const userData = response[0]._raw as unknown as IUser;
         api.defaults.headers.common['Authorization'] = `Bearer ${userData.token}`;

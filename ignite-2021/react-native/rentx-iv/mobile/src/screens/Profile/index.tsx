@@ -28,11 +28,13 @@ import { Alert, Keyboard, KeyboardAvoidingView, StatusBar, TouchableWithoutFeedb
 import { InputPassword } from '../../components/InputPassword';
 import { useAuth } from '../../hooks/useAuth';
 import { Button } from '../../components/Button';
+import { useNetInfo } from '@react-native-community/netinfo';
 
 export function Profile() {
   const theme = useTheme();
   const navigation = useNavigation();
   const { user, signOut, updateUser } = useAuth();
+  const netInfo = useNetInfo();
 
   const [option, setOption] = useState<'dataEdit' | 'passwordEdit'>('dataEdit');
   const [name, setName] = useState(user.name);
@@ -58,7 +60,11 @@ export function Profile() {
   }
 
   function handleOptionChange(option: 'dataEdit' | 'passwordEdit') {
-    setOption(option);
+    if (netInfo.isConnected === false && option === 'passwordEdit') {
+      Alert.alert('Você esta offline', 'Para mudar senha conecte-se a internet');
+    } else {
+      setOption(option);
+    }
   }
 
   async function handleChangeAvatar() {

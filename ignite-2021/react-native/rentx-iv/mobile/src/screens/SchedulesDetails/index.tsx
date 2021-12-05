@@ -40,6 +40,8 @@ import { format } from 'date-fns';
 import { api } from '../../services/api';
 import { Alert } from 'react-native';
 
+import { useNetInfo } from '@react-native-community/netinfo';
+
 interface ICarParams {
   car: ICarDTO;
   dates: string[];
@@ -53,47 +55,33 @@ interface IRentalPeriod {
 export function SchedulesDetails() {
   const navigation = useNavigation();
   const { car, dates } = useRoute().params as ICarParams;
-  const [rentalPeriod, setRentalPeriod] = useState<IRentalPeriod>(
-    {} as IRentalPeriod
-  );
+  const [rentalPeriod, setRentalPeriod] = useState<IRentalPeriod>({} as IRentalPeriod);
   const [isLoading, setIsLoading] = useState(false);
+  const [carUpdated, setCarUpdated] = useState<ICarDTO>({} as ICarDTO);
+  const netInfo = useNetInfo();
 
-  const rentalTotal = Number(dates.length * car.rent.price);
+  const rentalTotal = Number(dates.length * car.price);
 
   async function handleConfirmRental() {
     setIsLoading(true);
-    const schedulesByCar = await api.get(`/schedules_bycars/${car.id}`);
-
-    const unavailable_dates = [
-      ...schedulesByCar.data.unavailable_dates,
-      ...dates,
-    ];
-
-    await api.post('/schedules_byuser', {
-      user_id: 1,
-      car,
-      startDate: format(Util.getPlatformDate(new Date(dates[0])), 'dd/MM/yyyy'),
-      endDate: format(
-        Util.getPlatformDate(new Date(dates[dates.length - 1])),
-        'dd/MM/yyyy'
-      ),
-    });
-
     await api
-      .put(`/schedules_bycars/${car.id}`, {
-        id: car.id,
-        unavailable_dates,
+      .post('rentals', {
+        user_id: 1,
+        car_id: car.id,
+        start_date: new Date(dates[0]),
+        end_date: new Date(dates[dates.length - 1]),
+        total: rentalTotal,
       })
-      .then((response) =>
+      .then(() => {
         navigation.navigate('Confirmation', {
-          title: 'Carro alugado',
-          message: `Agora você só precisa ir até a concessionária da RENTX`,
           nextScreenRoute: 'Home',
-        })
-      )
-      .catch(() => {
-        Alert.alert('Não foi possivel confirmar o agendamento');
+          title: 'Carro alugado!',
+          message: `Agora você só precisa ir\naté a concessionária da RENTX\npegar o seu automóvel.`,
+        });
+      })
+      .catch((error) => {
         setIsLoading(false);
+        Alert.alert('Não foi possível confirmar o agendamento.');
       });
   }
 
@@ -104,12 +92,18 @@ export function SchedulesDetails() {
   useEffect(() => {
     setRentalPeriod({
       start: format(Util.getPlatformDate(new Date(dates[0])), 'dd/MM/yyyy'),
-      end: format(
-        Util.getPlatformDate(new Date(dates[dates.length - 1])),
-        'dd/MM/yyyy'
-      ),
+      end: format(Util.getPlatformDate(new Date(dates[dates.length - 1])), 'dd/MM/yyyy'),
     });
   }, []);
+
+  useEffect(() => {
+    (async () => {
+      if (netInfo.isConnected === true) {
+        const response = await api.get(`/cars/${car.id}`);
+        setCarUpdated(response.data);
+      }
+    })();
+  }, [netInfo.isConnected]);
 
   return (
     <>
@@ -118,7 +112,9 @@ export function SchedulesDetails() {
           <BackButton onPress={handleBack} />
         </Header>
         <CarImages>
-          <ImageSlider imagesUrl={car.photos} />
+          <ImageSlider
+            imagesUrl={!!carUpdated.photos ? carUpdated.photos : [{ id: car.thumbnail, photo: car.thumbnail }]}
+          />
         </CarImages>
         <Content>
           <Details>
@@ -128,26 +124,19 @@ export function SchedulesDetails() {
             </Description>
 
             <Rent>
-              <Period>{car.rent.period}</Period>
-              <Price>{`R$ ${car.rent.price}`}</Price>
+              <Period>{car.period}</Period>
+              <Price>{`R$ ${car.price}`}</Price>
             </Rent>
           </Details>
           <Accessories>
-            {car.accessories.map((accessory) => (
-              <Accessory
-                key={accessory.type}
-                name={accessory.name}
-                icon={Util.getAccessoryIcon(accessory.type)}
-              />
-            ))}
+            {carUpdated.accessories &&
+              carUpdated.accessories.map((accessory) => (
+                <Accessory key={accessory.type} name={accessory.name} icon={Util.getAccessoryIcon(accessory.type)} />
+              ))}
           </Accessories>
           <RentalPeriod>
             <CalendarIcon>
-              <Feather
-                name="calendar"
-                size={RFValue(24)}
-                color={theme.colors.shape}
-              />
+              <Feather name="calendar" size={RFValue(24)} color={theme.colors.shape} />
             </CalendarIcon>
 
             <DateInfo>
@@ -155,11 +144,7 @@ export function SchedulesDetails() {
               <DateValue>{rentalPeriod.start}</DateValue>
             </DateInfo>
 
-            <Feather
-              name="chevron-right"
-              size={RFValue(10)}
-              color={theme.colors.text}
-            />
+            <Feather name="chevron-right" size={RFValue(10)} color={theme.colors.text} />
 
             <DateInfo>
               <DateTitle>ATÉ</DateTitle>
@@ -169,7 +154,7 @@ export function SchedulesDetails() {
           <RentalPrice>
             <RentalPriceLabel>TOTAL</RentalPriceLabel>
             <RentalPriceDetails>
-              <RentalPriceQuota>{`R$ ${car.rent.price} x${dates.length} diárias`}</RentalPriceQuota>
+              <RentalPriceQuota>{`R$ ${car.price} x${dates.length} diárias`}</RentalPriceQuota>
               <RentalPriceTotal>{`R$ ${rentalTotal}`}</RentalPriceTotal>
             </RentalPriceDetails>
           </RentalPrice>

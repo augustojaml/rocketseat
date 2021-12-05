@@ -1,4 +1,4 @@
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useIsFocused } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import { FlatList } from 'react-native';
 import { useTheme } from 'styled-components';
@@ -26,6 +26,9 @@ import {
 import { Loading } from '../../components/Loading';
 import { CarAnimated } from '../../components/CarAnimated';
 
+import { Car as CarModel } from '../../database/model/Car';
+import { format, parseISO } from 'date-fns';
+
 interface IMyCars {
   id: string;
   user_id: string;
@@ -34,11 +37,19 @@ interface IMyCars {
   endDate: string;
 }
 
+interface IMyCar {
+  id: string;
+  car: CarModel;
+  start_date: string;
+  end_date: string;
+}
+
 export function MyCars() {
   const theme = useTheme();
   const navigation = useNavigation();
+  const screenIsFocus = useIsFocused();
 
-  const [cars, setCars] = useState<IMyCars[]>([]);
+  const [cars, setCars] = useState<IMyCar[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
   function handleBack() {
@@ -49,15 +60,23 @@ export function MyCars() {
     (async () => {
       try {
         setIsLoading(true);
-        const response = await api.get('schedules_byuser?user_id=1');
-        setCars(response.data);
+        const response = await api.get('rentals');
+        const dataFormatted = response.data.map((data: IMyCar) => {
+          return {
+            id: data.id,
+            car: data.car,
+            start_date: format(parseISO(data.start_date), 'dd/MM/yyyy'),
+            end_date: format(parseISO(data.end_date), 'dd/MM/yyyy'),
+          };
+        });
+        setCars(dataFormatted);
       } catch (error) {
         console.log(error);
       } finally {
         setIsLoading(false);
       }
     })();
-  }, []);
+  }, [screenIsFocus]);
 
   return (
     <>
@@ -77,9 +96,7 @@ export function MyCars() {
             <>
               <Appointments>
                 <AppointmentsTitle>Agendamentos Feitos</AppointmentsTitle>
-                <AppointmentsQuantity>
-                  {String(cars.length).padStart(2, '0')}
-                </AppointmentsQuantity>
+                <AppointmentsQuantity>{String(cars.length).padStart(2, '0')}</AppointmentsQuantity>
               </Appointments>
               <FlatList
                 data={cars}
@@ -87,18 +104,18 @@ export function MyCars() {
                 showsVerticalScrollIndicator={false}
                 renderItem={({ item }) => (
                   <CarWrapper>
-                    <Car car={item.car} />
+                    <Car key={item.id} car={item.car} />
                     <CarFooter>
                       <CarFooterTitle>Período</CarFooterTitle>
                       <CarFooterPeriod>
-                        <CarFooterDate>{item.startDate}</CarFooterDate>
+                        <CarFooterDate>{item.start_date}</CarFooterDate>
                         <AntDesign
                           name="arrowright"
                           size={20}
                           color={theme.colors.title}
                           style={{ marginHorizontal: 10 }}
                         />
-                        <CarFooterDate>{item.endDate}</CarFooterDate>
+                        <CarFooterDate>{item.end_date}</CarFooterDate>
                       </CarFooterPeriod>
                     </CarFooter>
                   </CarWrapper>
