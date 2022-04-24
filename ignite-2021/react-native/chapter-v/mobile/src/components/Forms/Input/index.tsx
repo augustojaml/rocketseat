@@ -1,13 +1,16 @@
+/* eslint-disable react/require-default-props */
 import React from 'react';
 import { TextInputProps } from 'react-native';
 import { Container } from './styled';
 
-interface IInputProps extends TextInputProps {}
+interface IInputProps extends TextInputProps {
+  active?: boolean;
+}
 
-export function Input({ ...rest }: IInputProps) {
+export function Input({ active = false, ...rest }: IInputProps) {
   return (
     <>
-      <Container {...rest} />
+      <Container active={active} {...rest} />
     </>
   );
 }

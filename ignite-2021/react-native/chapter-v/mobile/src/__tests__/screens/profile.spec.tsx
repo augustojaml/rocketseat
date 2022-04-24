@@ -3,8 +3,8 @@ import React from 'react';
 import { render } from '@testing-library/react-native';
 import { Profile } from '../../screens/Profile';
 
-describe('###################### \n  #### Test Profile #### \n  ######################', () => {
-  it('ckeck if show correctly user input name placeholder', () => {
+describe('########################## \n  ##### Profile Screen ##### \n  ##########################', () => {
+  it('should have placeholder correctly in user name input ', () => {
     const { getByPlaceholderText } = render(<Profile />);
 
     const inputName = getByPlaceholderText('Nome');
@@ -12,7 +12,7 @@ describe('###################### \n  #### Test Profile #### \n  ################
     expect(inputName).toBeTruthy();
   });
 
-  it('check if user data has been loaded', () => {
+  it('should be loaded user data', () => {
     const { getByTestId } = render(<Profile />);
     const inputName = getByTestId('input-name');
     const inputSurName = getByTestId('input-surname');
@@ -21,7 +21,7 @@ describe('###################### \n  #### Test Profile #### \n  ################
     expect(inputSurName.props.value).toEqual('Monteiro');
   });
 
-  it('check if title render correctly', () => {
+  it('should exist title correctly', () => {
     const { getByTestId } = render(<Profile />);
     const textTitle = getByTestId('text-title');
 

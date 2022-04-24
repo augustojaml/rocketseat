@@ -23,3 +23,14 @@ yarn add @types/jest -D
   [Documentation](https://docs.expo.dev/guides/testing-with-jest/)
 
 - Create Folder `./src/__tests__`
+
+- Jest Styled Component
+
+  - [Documentation](https://github.com/styled-components/jest-styled-components)
+
+- React Hook Test Library
+
+  - [Documentation](https://github.com/testing-library/react-hooks-testing-library)
+
+- Ts-Jest
+  - [Documentation](https://github.com/kulshekhar/ts-jest)
